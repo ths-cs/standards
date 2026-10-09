@@ -136,6 +136,45 @@
   .error ol { padding-left: 1.2rem; margin: 0.5rem 0 1rem; }
   footer { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 2rem; color: var(--ink-soft); font-size: 0.9rem; }
 
+  /* ---------- board view (classroom display) ---------- */
+  .btn.sm { min-height: 36px; padding: 0.3rem 0.75rem; font-size: 0.9rem; margin-left: auto; }
+  .anchor + .btn.sm { margin-left: 0; }
+  .board { position: fixed; inset: 0; z-index: 50; background: var(--paper); border-top: 10px solid var(--brand); display: flex; flex-direction: column; }
+  .b-top { display: flex; align-items: center; gap: 1rem; padding: 0.75rem clamp(1rem, 2.5vw, 2.5rem); border-bottom: 1px solid var(--line); background: var(--card); }
+  .b-logo { width: clamp(40px, 4vw, 64px); height: clamp(40px, 4vw, 64px); flex: none; color: var(--brand); }
+  .b-logo svg { width: 100%; height: 100%; display: block; }
+  .b-course { font-weight: 600; font-size: clamp(1.1rem, 1.8vw, 1.9rem); line-height: 1.15; }
+  .b-course span { color: var(--brand); }
+  .b-count { color: var(--ink-soft); font-size: clamp(0.9rem, 1.2vw, 1.3rem); font-weight: 500; }
+  .b-tools { margin-left: auto; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: center; justify-content: flex-end; }
+  .b-tools select { font: inherit; min-height: 44px; padding: 0.4rem 0.6rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); }
+  .b-stage { flex: 1; min-height: 0; overflow: auto; padding: clamp(0.75rem, 2.5vh, 2rem) clamp(1rem, 2.5vw, 2.5rem); display: flex; flex-direction: column; gap: clamp(0.6rem, 2vh, 1.75rem); }
+  .b-id { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+  .b-code { font-size: clamp(1.25rem, 2.4vw, 2.6rem); font-weight: 700; color: var(--brand); }
+  .b-id .anchor { margin: 0; font-size: clamp(0.85rem, 1.2vw, 1.3rem); }
+  .b-title { margin: 0; font-size: clamp(2.1rem, 5.4vw, 6rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.04; }
+  .b-can { margin: 0; max-width: 34em; font-size: clamp(1.2rem, 2.3vw, 2.7rem); line-height: 1.3; }
+  .b-can b { font-weight: 600; color: var(--brand); }
+  .b-levels { margin-top: auto; gap: clamp(0.5rem, 1.2vw, 1.25rem); }
+  .b-levels .lvl { padding: clamp(0.6rem, 1.2vw, 1.25rem); }
+  .b-levels .lvl-h { font-size: clamp(1rem, 1.5vw, 1.8rem); }
+  .b-levels .num { width: clamp(1.9rem, 2.4vw, 3rem); height: clamp(1.9rem, 2.4vw, 3rem); font-size: clamp(1.05rem, 1.4vw, 1.8rem); }
+  .b-levels .lvl p { font-size: clamp(1rem, 1.55vw, 1.95rem); line-height: 1.32; }
+  .b-levels[data-focus] { max-width: none; margin-top: clamp(0.5rem, 3vh, 2rem); }
+  .b-levels[data-focus] .lvl p { font-size: clamp(1.5rem, 3.2vw, 3.8rem); line-height: 1.25; }
+  .b-extra { margin: 0; max-width: 60em; font-size: clamp(0.95rem, 1.3vw, 1.5rem); }
+  .b-extra.note { padding: 0.6rem 0.9rem; border-left: 4px solid var(--gold); background: #fbf4e4; }
+  .b-nav { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem clamp(1rem, 2.5vw, 2.5rem) 0.8rem; border-top: 1px solid var(--line); background: var(--card); }
+  .b-nav .btn { min-width: 48px; min-height: 48px; font-size: 1.1rem; }
+  .btn:disabled { opacity: 0.35; cursor: default; background: var(--card); }
+  .b-chips { flex: 1; display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+  .chip { appearance: none; font: inherit; font-weight: 500; font-size: 0.9rem; color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 0.3rem 0.8rem; min-height: 40px; cursor: pointer; }
+  .chip:hover { background: var(--brand-tint); }
+  .chip[aria-current="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 700; }
+  .b-hint { color: var(--ink-soft); font-size: 0.8rem; text-align: center; padding: 0 1rem 0.5rem; background: var(--card); margin: 0; }
+  @media (max-height: 560px) { .b-hint { display: none; } }
+  @media print { .board { display: none !important; } }
+
   @media (max-width: 1100px) { .levels:not([data-focus]) { --cols: 2; } }
   @media (max-width: 640px) {
     .levels:not([data-focus]) { --cols: 1; }
@@ -328,13 +367,16 @@
     state.courses = list;
 
     var hash = decodeURIComponent((location.hash || "").slice(1));
+    var wantBoard = /^board\//i.test(hash);
+    hash = hash.replace(/^board\//i, "");
     var match = list.filter(function (c) {
       return hash && (hash.toLowerCase() === c.code.toLowerCase() || hash.toLowerCase().indexOf(c.code.toLowerCase()) === 0);
     })[0];
     state.active = (match || list[0]).code;
     state.targetCode = /\d/.test(hash) ? hash : "";
     renderAll();
-    if (state.targetCode) scrollToTarget();
+    if (wantBoard) openBoard(state.targetCode);
+    else if (state.targetCode) scrollToTarget();
   }
 
   function showError(err) {
@@ -405,7 +447,7 @@
       ["all", "4", "3", "2", "1"].map(function (f) {
         return '<button type="button" data-focus="' + f + '" aria-pressed="' + (state.focus === f) + '">' + (f === "all" ? "All levels" : f) + "</button>";
       }).join("") + "</div></div>" +
-      '<span class="spacer"></span><button class="btn" id="print" type="button">Print this course</button></div>';
+      '<span class="spacer"></span><button class="btn" type="button" data-b="open" data-bcode="">Board view</button><button class="btn" id="print" type="button">Print this course</button></div>';
 
     html += '<details class="scale"><summary>How scoring works</summary><div class="scale-body"><div class="scale-grid">' +
       C.scale.map(function (s) {
@@ -431,7 +473,8 @@
     return '<article class="std" id="' + esc(d.code) + '">' +
       '<div class="std-head"><a class="std-code" href="#' + encodeURIComponent(d.code) + '">' + rich(d.code, q) + "</a>" +
       "<h3>" + rich(d.standard, q) + "</h3>" +
-      (d.anchor ? '<span class="anchor">' + rich(d.anchor, q) + "</span>" : "") + "</div>" +
+      (d.anchor ? '<span class="anchor">' + rich(d.anchor, q) + "</span>" : "") +
+      '<button class="btn sm" type="button" data-b="open" data-bcode="' + esc(d.code) + '">Board view</button></div>' +
       (d.can ? '<p class="can"><b>Students can</b> ' + lowerFirst(rich(d.can, q)) + "</p>" : "") +
       '<div class="levels">' +
         levelHTML(4, labels[4] || "Exceeds", d.l4, q) + levelHTML(3, labels[3] || "Meets", d.l3, q) +
@@ -469,12 +512,8 @@
     var t = e.target.closest ? e.target.closest("[data-code], [data-focus], #print, #clear") : null;
     if (!t) return;
     if (t.classList.contains("tab")) activate(t.getAttribute("data-code"));
-    else if (t.hasAttribute("data-focus")) {
-      state.focus = t.getAttribute("data-focus");
-      var btns = document.querySelectorAll(".seg button");
-      for (var i = 0; i < btns.length; i++) btns[i].setAttribute("aria-pressed", btns[i] === t);
-      applyFocus();
-    } else if (t.id === "print") window.print();
+    else if (t.hasAttribute("data-focus")) setFocus(t.getAttribute("data-focus"));
+    else if (t.id === "print") window.print();
     else if (t.id === "clear") { state.query = ""; renderTabs(); renderCourse(); }
   });
 
@@ -503,10 +542,159 @@
   window.addEventListener("hashchange", function () {
     if (!state.data.length) return;
     var hash = decodeURIComponent(location.hash.slice(1));
+    var board = /^board\//i.test(hash);
+    hash = hash.replace(/^board\//i, "");
     var match = state.courses.filter(function (c) { return hash.toLowerCase().indexOf(c.code.toLowerCase()) === 0; })[0];
-    if (match) {
-      state.active = match.code; state.targetCode = /\d/.test(hash) ? hash : "";
-      renderTabs(); renderCourse(); if (state.targetCode) scrollToTarget();
+    if (!match) return;
+    if (state.board && !board) closeBoard(true);
+    state.active = match.code; state.targetCode = /\d/.test(hash) ? hash : "";
+    renderTabs(); renderCourse();
+    if (board) openBoard(state.targetCode, true);
+    else if (state.targetCode) scrollToTarget();
+  });
+
+  /* ---------- board view ---------- */
+  function setFocus(f) {
+    state.focus = f;
+    var btns = document.querySelectorAll(".controls .seg button");
+    for (var i = 0; i < btns.length; i++) btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-focus") === f);
+    applyFocus();
+    if (state.board) renderBoard();
+  }
+
+  function pageInert(on) {
+    ["main", "footer"].forEach(function (tag) { var e = document.querySelector(tag); if (e) e.inert = on; });
+    [".masthead", ".tabbar"].forEach(function (sel) { var e = document.querySelector(sel); if (e) e.inert = on; });
+    document.body.style.overflow = on ? "hidden" : "";
+  }
+
+  function openBoard(code, quiet) {
+    var rows = rowsFor(state.active), i = 0;
+    if (!rows.length) return;
+    rows.forEach(function (d, j) { if (code && d.code === code) i = j; });
+    state.board = { idx: i, opener: state.board ? state.board.opener : document.activeElement };
+    pageInert(true);
+    renderBoard();
+    if (!quiet) syncBoardHash();
+    var first = document.querySelector("#board .chip[aria-current='true']") || document.querySelector("#board button");
+    if (first) first.focus();
+  }
+
+  function closeBoard(skipHash) {
+    var el = $("board"), opener = state.board && state.board.opener;
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+    if (el) el.remove();
+    state.board = null;
+    pageInert(false);
+    if (!skipHash) history.replaceState(null, "", "#" + encodeURIComponent(state.active));
+    if (opener && document.body.contains(opener) && opener.focus) opener.focus();
+  }
+
+  function syncBoardHash() {
+    var d = rowsFor(state.active)[state.board.idx];
+    history.replaceState(null, "", "#board/" + encodeURIComponent(d.code));
+  }
+
+  function goBoard(i) {
+    var n = rowsFor(state.active).length;
+    if (i < 0 || i >= n) return;
+    state.board.idx = i;
+    renderBoard(); syncBoardHash();
+  }
+
+  function renderBoard() {
+    var rows = rowsFor(state.active), n = rows.length, d = rows[state.board.idx], c = courseMeta(state.active);
+    var labels = {}; C.scale.forEach(function (s) { labels[s.level] = s.label; });
+    var el = $("board");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "board"; el.className = "board";
+      el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Board view");
+      document.body.appendChild(el);
+    }
+    var ae = document.activeElement, key = null;
+    if (ae && el.contains(ae)) {
+      ["data-b", "data-bfocus", "data-bi"].forEach(function (a) { if (ae.hasAttribute(a)) key = "[" + a + '="' + ae.getAttribute(a) + '"]'; });
+      if (ae.id === "b-course") key = "#b-course";
+    }
+
+    var courseOpts = state.courses.map(function (x) {
+      return '<option value="' + esc(x.code) + '"' + (x.code === state.active ? " selected" : "") + ">" + esc(x.name) + "</option>";
+    }).join("");
+
+    el.innerHTML =
+      '<div class="b-top"><div class="b-logo" aria-hidden="true">' + (C.logoSvg || DEFAULT_LOGO) + "</div>" +
+      '<div><div class="b-course">' + esc(c.name) + " <span>" + esc(c.code) + '</span></div><div class="b-count">Standard ' + (state.board.idx + 1) + " of " + n + "</div></div>" +
+      '<div class="b-tools"><label class="b-count" for="b-course">Course</label><select id="b-course">' + courseOpts + "</select>" +
+      '<div class="seg" role="group" aria-label="Show rubric levels">' +
+      ["all", "4", "3", "2", "1"].map(function (f) {
+        return '<button type="button" data-bfocus="' + f + '" aria-pressed="' + (state.focus === f) + '">' + (f === "all" ? "All levels" : f) + "</button>";
+      }).join("") + "</div>" +
+      (document.fullscreenEnabled ? '<button class="btn" type="button" data-b="full">Full screen</button>' : "") +
+      '<button class="btn" type="button" data-b="close">Close</button></div></div>' +
+
+      '<div class="b-stage"><div class="b-id"><span class="b-code">' + esc(d.code) + "</span>" +
+      (d.anchor ? '<span class="anchor">' + esc(d.anchor) + "</span>" : "") + "</div>" +
+      '<h2 class="b-title">' + esc(d.standard) + "</h2>" +
+      (d.can ? '<p class="b-can"><b>Students can</b> ' + rich(d.can) + "</p>" : "") +
+      '<div class="levels b-levels"' + (state.focus !== "all" ? ' data-focus="' + state.focus + '"' : "") + ">" +
+        levelHTML(4, labels[4] || "Exceeds", d.l4, "") + levelHTML(3, labels[3] || "Meets", d.l3, "") +
+        levelHTML(2, labels[2] || "Approaching", d.l2, "") + levelHTML(1, labels[1] || "Below", d.l1, "") + "</div>" +
+      (d.evidence ? '<p class="b-extra"><b>Evidence</b> ' + rich(d.evidence) + "</p>" : "") +
+      (d.notes ? '<p class="b-extra note">' + rich(d.notes) + "</p>" : "") + "</div>" +
+
+      '<div class="b-nav"><button class="btn" type="button" data-b="prev" aria-label="Previous standard"' + (state.board.idx === 0 ? " disabled" : "") + '>&larr; Prev</button>' +
+      '<div class="b-chips">' + rows.map(function (r, i) {
+        return '<button class="chip" type="button" data-bi="' + i + '" aria-current="' + (i === state.board.idx) + '">' + esc(r.code) + "</button>";
+      }).join("") + "</div>" +
+      '<button class="btn" type="button" data-b="next" aria-label="Next standard"' + (state.board.idx === n - 1 ? " disabled" : "") + ">Next &rarr;</button></div>" +
+      '<p class="b-hint">Left and right arrows change standards. Keys 1 to 4 show one level, A shows all. F toggles full screen. Esc closes.</p>';
+
+    if (key) { var again = el.querySelector(key); if (again && !again.disabled) again.focus(); }
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-b], [data-bfocus], [data-bi]") : null;
+    if (!t) return;
+    if (t.hasAttribute("data-bfocus")) return setFocus(t.getAttribute("data-bfocus"));
+    if (t.hasAttribute("data-bi")) return goBoard(parseInt(t.getAttribute("data-bi"), 10));
+    var act = t.getAttribute("data-b");
+    if (act === "open") openBoard(t.getAttribute("data-bcode") || "");
+    else if (act === "close") closeBoard();
+    else if (act === "prev") goBoard(state.board.idx - 1);
+    else if (act === "next") goBoard(state.board.idx + 1);
+    else if (act === "full") {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else $("board").requestFullscreen && $("board").requestFullscreen();
+    }
+  });
+
+  document.addEventListener("change", function (e) {
+    if (e.target.id !== "b-course") return;
+    state.active = e.target.value; state.targetCode = "";
+    renderTabs(); renderCourse();
+    state.board.idx = 0; renderBoard(); syncBoardHash();
+    $("b-course").focus();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (!state.board || e.ctrlKey || e.metaKey || e.altKey) return;
+    var k = e.key, inSelect = e.target && e.target.tagName === "SELECT";
+    if (k === "Escape") { closeBoard(); e.preventDefault(); }
+    else if (k === "Tab") {
+      var f = Array.prototype.filter.call($("board").querySelectorAll("button, select"), function (x) { return !x.disabled; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+      else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+    }
+    else if (inSelect) return;
+    else if (k === "ArrowRight" || k === "PageDown") { goBoard(state.board.idx + 1); e.preventDefault(); }
+    else if (k === "ArrowLeft" || k === "PageUp") { goBoard(state.board.idx - 1); e.preventDefault(); }
+    else if (k === "1" || k === "2" || k === "3" || k === "4") setFocus(k);
+    else if (k === "a" || k === "A" || k === "0") setFocus("all");
+    else if ((k === "f" || k === "F") && document.fullscreenEnabled) {
+      if (document.fullscreenElement) document.exitFullscreen(); else $("board").requestFullscreen();
     }
   });
 
