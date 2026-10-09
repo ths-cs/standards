@@ -4,7 +4,10 @@ window.DASHBOARD_CONFIG = {
 
   // Published Google Sheet CSV link (File > Share > Publish to web > CSV).
   // Leave blank to load core-standards.csv from the same folder as the page.
-  csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSrZNdVL7fkYpz01LTWllFm2J2qOMtlDhMgTULE-ilEDaTWbofSSOoAT4tQlmjjv9N6mqY8sgTDOMAM/pub?gid=1518493198&single=true&output=csv",
+  csvUrl: "",
+
+  // Heading shown in the masthead and the browser tab.
+  title: "Core Standards & Rubrics",
 
   schoolYear: "2026\u20132027",
   school: "Toppenish High School",

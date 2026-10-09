@@ -213,7 +213,7 @@
   <div class="masthead-inner">
     <div class="logo" id="logo" aria-hidden="true"></div>
     <div>
-      <h1>Core Standards &amp; Rubrics</h1>
+      <h1 id="title">Core Standards &amp; Rubrics</h1>
       <p id="subtitle"></p>
     </div>
   </div>
@@ -232,6 +232,7 @@
 
   /* ---------- config (config.js overrides these defaults) ---------- */
   var DEFAULTS = {
+    title: "Core Standards & Rubrics",
     csvUrl: "",
     csvFallback: "core-standards.csv",
     schoolYear: "", school: "", instructor: "",
@@ -424,6 +425,8 @@
       document.documentElement.style.setProperty("--brand", C.brandColor);
     }
     $("logo").innerHTML = C.logoSvg || DEFAULT_LOGO;
+    $("title").textContent = C.title;
+    if (!state.only) document.title = C.title;
     var bits = [C.school, C.schoolYear && (C.schoolYear + " school year")].filter(Boolean);
     $("subtitle").textContent = bits.join(", ");
     $("footer").textContent = C.instructor ? "Instructor: " + C.instructor : "";
