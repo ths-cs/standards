@@ -4,7 +4,7 @@ window.DASHBOARD_CONFIG = {
 
   // Published Google Sheet CSV link (File > Share > Publish to web > CSV).
   // Leave blank to load core-standards.csv from the same folder as the page.
-  csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSrZNdVL7fkYpz01LTWllFm2J2qOMtlDhMgTULE-ilEDaTWbofSSOoAT4tQlmjjv9N6mqY8sgTDOMAM/pub?gid=1518493198&single=true&output=csv",
+  csvUrl: "",
 
   // Heading shown in the masthead and the browser tab.
   title: "Core Standards & Rubrics",
@@ -33,13 +33,28 @@ window.DASHBOARD_CONFIG = {
       note: "Aligned to the National Core Arts Standards for Visual Arts." }
   ],
 
-  // The universal scale shown in "How scoring works".
+  // Scoring language, from the THS Standards-Based Grading Implementation Handbook, 2026-2027.
+  // Shown in "How scoring works" and used for the level names on every rubric.
   scale: [
-    { level: 4, label: "Exceeds",     text: "Level 3 plus independent transfer to a new or more complex situation, or a professional-quality result." },
-    { level: 3, label: "Meets",       text: "The standard as written, done independently and accurately." },
-    { level: 2, label: "Approaching", text: "Partly there, with errors, gaps, or occasional help needed." },
-    { level: 1, label: "Below",       text: "Minimal evidence, or constant guidance needed." }
+    { level: 4, label: "Exceeds Standard",     text: "The student demonstrates mastery beyond the standard by applying learning to new contexts, analyzing complex situations, or making interdisciplinary connections." },
+    { level: 3, label: "Meets Standard",       text: "The student independently demonstrates proficiency on the standard. This is the instructional goal for every student." },
+    { level: 2, label: "Approaching Standard", text: "The student demonstrates partial proficiency and requires additional support or practice." },
+    { level: 1, label: "Below Standard",       text: "The student demonstrates limited understanding and requires significant support." },
+    { level: "IE", label: "Insufficient Evidence", text: "Insufficient evidence exists to determine a proficiency score." }
   ],
 
-  scoringNote: "Academic scores reflect standard mastery only. Attendance, behavior, compliance, extra credit, and late penalties are not scored here. Habits of Success are reported separately."
+  scoringNotes: [
+    { title: "What counts",
+      text: "Grades reflect learning. Attendance, behavior, participation, extra credit, compliance, and late penalties do not change an academic score. Habits of Success are reported separately." },
+    { title: "How the final score is decided",
+      text: "Final proficiency comes from multiple data points, professional judgment, and recent, consistent evidence. Summative work is the primary source, and formative work can also count. A simple average is avoided when it does not show current proficiency." },
+    { title: "Opportunities for a 4",
+      text: "Each unit includes at least one opportunity to show advanced proficiency. It is tied to the standard, open to every student, and based on application, analysis, evaluation, or creation. It is never extra credit or extra work." },
+    { title: "IE or 1",
+      text: "IE is temporary. It means there is not yet enough evidence to score, such as a missing assessment or excessive absences, and it is replaced once evidence is collected. A 1 is for completed work that shows limited understanding." },
+    { title: "Reassessment",
+      text: "After corrective learning, students may reassess, ideally within two weeks of feedback. In yearlong courses, newer evidence can replace earlier evidence on the same standard. In semester courses, reassess before the unit ends when possible." }
+  ],
+
+  scoringSource: "Source: Toppenish High School Standards-Based Grading Implementation Handbook, 2026\u20132027."
 };

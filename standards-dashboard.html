@@ -97,6 +97,10 @@
   .scale-grid div { display: grid; grid-template-columns: auto 1fr; gap: 0 0.6rem; align-items: start; }
   .scale-grid p { margin: 0; font-size: 0.92rem; }
   .scale-grid strong { display: block; }
+  .scale-notes { margin: 1.25rem 0 0; display: grid; gap: 0.6rem; max-width: 80ch; }
+  .scale-notes p { margin: 0; font-size: 0.95rem; }
+  .scale-notes b { font-weight: 600; }
+  .lvl.lIE .num { background: var(--card); color: var(--ink); border: 2px solid var(--ink); font-size: 0.85rem; }
   .scale-note { margin: 1rem 0 0; color: var(--ink-soft); font-size: 0.92rem; max-width: 80ch; }
 
   /* ---------- standards ---------- */
@@ -240,12 +244,14 @@
     brandColor: "",
     courses: [],
     scale: [
-      { level: 4, label: "Exceeds",     text: "Level 3 plus independent transfer to a new or more complex situation, or a professional-quality result." },
-      { level: 3, label: "Meets",       text: "The standard as written, done independently and accurately." },
-      { level: 2, label: "Approaching", text: "Partly there, with errors, gaps, or occasional help needed." },
-      { level: 1, label: "Below",       text: "Minimal evidence, or constant guidance needed." }
+      { level: 4, label: "Exceeds Standard",     text: "The student demonstrates mastery beyond the standard by applying learning to new contexts, analyzing complex situations, or making interdisciplinary connections." },
+      { level: 3, label: "Meets Standard",       text: "The student independently demonstrates proficiency on the standard. This is the instructional goal for every student." },
+      { level: 2, label: "Approaching Standard", text: "The student demonstrates partial proficiency and requires additional support or practice." },
+      { level: 1, label: "Below Standard",       text: "The student demonstrates limited understanding and requires significant support." },
+      { level: "IE", label: "Insufficient Evidence", text: "Insufficient evidence exists to determine a proficiency score." }
     ],
-    scoringNote: ""
+    scoringNotes: [],
+    scoringSource: ""
   };
   var C = Object.assign({}, DEFAULTS, window.DASHBOARD_CONFIG || {});
 
@@ -465,7 +471,7 @@
     html += '<details class="scale"><summary>How scoring works</summary><div class="scale-body"><div class="scale-grid">' +
       C.scale.map(function (s) {
         return '<div><span class="lvl l' + s.level + '" style="border:0;background:none;padding:0"><span class="num">' + s.level + "</span></span><p><strong>" + esc(s.label) + "</strong>" + esc(s.text) + "</p></div>";
-      }).join("") + "</div>" + (C.scoringNote ? '<p class="scale-note">' + esc(C.scoringNote) + "</p>" : "") + "</div></details>";
+      }).join("") + "</div>" + scoringNotesHTML() + "</div></details>";
 
     if (!rows.length) {
       html += '<div class="empty"><h3>No standards match "' + esc(q) + '"</h3><p>Try a shorter search, or switch courses to see matches elsewhere.</p>' +
@@ -475,6 +481,15 @@
     }
     $("main").innerHTML = html;
     applyFocus();
+  }
+
+  function scoringNotesHTML() {
+    var notes = (C.scoringNotes || []).slice();
+    if (!notes.length && C.scoringNote) notes.push({ title: "", text: C.scoringNote });
+    var html = notes.length ? '<div class="scale-notes">' + notes.map(function (n) {
+      return "<p>" + (n.title ? "<b>" + esc(n.title) + ".</b> " : "") + esc(n.text) + "</p>";
+    }).join("") + "</div>" : "";
+    return html + (C.scoringSource ? '<p class="scale-note">' + esc(C.scoringSource) + "</p>" : "");
   }
 
   function levelHTML(n, label, text, q) {
