@@ -648,7 +648,7 @@
         return '<button class="chip" type="button" data-bi="' + i + '" aria-current="' + (i === state.board.idx) + '">' + esc(r.code) + "</button>";
       }).join("") + "</div>" +
       '<button class="btn" type="button" data-b="next" aria-label="Next standard"' + (state.board.idx === n - 1 ? " disabled" : "") + ">Next &rarr;</button></div>" +
-      '<p class="b-hint">Left and right arrows change standards. Keys 1 to 4 show one level, A shows all. F toggles full screen. Esc closes.</p>';
+      '<p class="b-hint">Left and right arrows change standards. Up and down arrows change courses. Keys 1 to 4 show one level, A shows all. F toggles full screen. Esc closes.</p>';
 
     if (key) { var again = el.querySelector(key); if (again && !again.disabled) again.focus(); }
   }
@@ -669,12 +669,23 @@
     }
   });
 
-  document.addEventListener("change", function (e) {
-    if (e.target.id !== "b-course") return;
-    state.active = e.target.value; state.targetCode = "";
+  function switchBoardCourse(code, keepSelectFocus) {
+    state.active = code; state.targetCode = "";
     renderTabs(); renderCourse();
     state.board.idx = 0; renderBoard(); syncBoardHash();
-    $("b-course").focus();
+    if (keepSelectFocus) $("b-course").focus();
+  }
+
+  function stepCourse(dir) {
+    var codes = state.courses.map(function (c) { return c.code; });
+    if (codes.length < 2) return;
+    var i = (codes.indexOf(state.active) + dir + codes.length) % codes.length;
+    switchBoardCourse(codes[i], false);
+  }
+
+  document.addEventListener("change", function (e) {
+    if (e.target.id !== "b-course") return;
+    switchBoardCourse(e.target.value, true);
   });
 
   document.addEventListener("keydown", function (e) {
@@ -691,6 +702,8 @@
     else if (inSelect) return;
     else if (k === "ArrowRight" || k === "PageDown") { goBoard(state.board.idx + 1); e.preventDefault(); }
     else if (k === "ArrowLeft" || k === "PageUp") { goBoard(state.board.idx - 1); e.preventDefault(); }
+    else if (k === "ArrowDown") { stepCourse(1); e.preventDefault(); }
+    else if (k === "ArrowUp") { stepCourse(-1); e.preventDefault(); }
     else if (k === "1" || k === "2" || k === "3" || k === "4") setFocus(k);
     else if (k === "a" || k === "A" || k === "0") setFocus("all");
     else if ((k === "f" || k === "F") && document.fullscreenEnabled) {
