@@ -137,8 +137,16 @@
   footer { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 2rem; color: var(--ink-soft); font-size: 0.9rem; }
 
   /* ---------- board view (classroom display) ---------- */
-  .btn.sm { min-height: 36px; padding: 0.3rem 0.75rem; font-size: 0.9rem; margin-left: auto; }
-  .anchor + .btn.sm { margin-left: 0; }
+  .btn.sm { min-height: 36px; padding: 0.3rem 0.75rem; font-size: 0.9rem; }
+  .std-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-left: auto; }
+  .anchor + .std-actions { margin-left: 0; }
+  .std-code-plain { font-size: 1.1rem; font-weight: 700; color: var(--brand); }
+  body.only .tabbar { display: none; }
+  body.only main { max-width: 1000px; }
+  body.only .std-head h3 { font-size: clamp(1.6rem, 4vw, 2.4rem); }
+  body.only .can { font-size: 1.2rem; }
+  .only-course { margin: 0 0 0.75rem; color: var(--ink-soft); font-weight: 500; }
+  body.only .controls { margin: 0 0 1rem; }
   .board { position: fixed; inset: 0; z-index: 50; background: var(--paper); border-top: 10px solid var(--brand); display: flex; flex-direction: column; }
   .b-top { display: flex; align-items: center; gap: 1rem; padding: 0.75rem clamp(1rem, 2.5vw, 2.5rem); border-bottom: 1px solid var(--line); background: var(--card); }
   .b-logo { width: clamp(40px, 4vw, 64px); height: clamp(40px, 4vw, 64px); flex: none; color: var(--brand); }
@@ -205,7 +213,7 @@
   <div class="masthead-inner">
     <div class="logo" id="logo" aria-hidden="true"></div>
     <div>
-      <h1>Core Standards &amp; Rubrics</h1>
+      <h1>Core standards &amp; rubrics</h1>
       <p id="subtitle"></p>
     </div>
   </div>
@@ -246,7 +254,7 @@
     '<path d="M11 11h26v7h-9.5v19h-7V18H11z" fill="#fff"/></svg>';
 
   /* ---------- state ---------- */
-  var state = { data: [], courses: [], active: null, focus: "all", query: "", targetCode: "" };
+  var state = { data: [], courses: [], active: null, focus: "all", query: "", targetCode: "", only: "" };
 
   /* ---------- helpers ---------- */
   function $(id) { return document.getElementById(id); }
@@ -367,6 +375,8 @@
     state.courses = list;
 
     var hash = decodeURIComponent((location.hash || "").slice(1));
+    var onlyCode = /^only\//i.test(hash) ? hash.replace(/^only\//i, "") : (new URLSearchParams(location.search).get("only") || "");
+    if (onlyCode) { renderOnly(onlyCode); return; }
     var wantBoard = /^board\//i.test(hash);
     hash = hash.replace(/^board\//i, "");
     var match = list.filter(function (c) {
@@ -468,13 +478,14 @@
     return '<div class="lvl l' + n + '"><div class="lvl-h"><span class="num">' + n + "</span><span>" + label + "</span></div><p>" + rich(text, q) + "</p></div>";
   }
 
-  function standardHTML(d, q) {
+  function standardHTML(d, q, bare) {
     var labels = {}; C.scale.forEach(function (s) { labels[s.level] = s.label; });
     return '<article class="std" id="' + esc(d.code) + '">' +
-      '<div class="std-head"><a class="std-code" href="#' + encodeURIComponent(d.code) + '">' + rich(d.code, q) + "</a>" +
+      '<div class="std-head">' + (bare ? '<span class="std-code-plain">' + rich(d.code, q) + "</span>" : '<a class="std-code" href="#' + encodeURIComponent(d.code) + '">' + rich(d.code, q) + "</a>") +
       "<h3>" + rich(d.standard, q) + "</h3>" +
       (d.anchor ? '<span class="anchor">' + rich(d.anchor, q) + "</span>" : "") +
-      '<button class="btn sm" type="button" data-b="open" data-bcode="' + esc(d.code) + '">Board view</button></div>' +
+      (bare ? "" : '<span class="std-actions"><button class="btn sm" type="button" data-copy="' + esc(d.code) + '">Copy single link</button>' +
+      '<button class="btn sm" type="button" data-b="open" data-bcode="' + esc(d.code) + '">Board view</button></span>') + "</div>" +
       (d.can ? '<p class="can"><b>Students can</b> ' + lowerFirst(rich(d.can, q)) + "</p>" : "") +
       '<div class="levels">' +
         levelHTML(4, labels[4] || "Exceeds", d.l4, q) + levelHTML(3, labels[3] || "Meets", d.l3, q) +
@@ -541,7 +552,10 @@
 
   window.addEventListener("hashchange", function () {
     if (!state.data.length) return;
-    var hash = decodeURIComponent(location.hash.slice(1));
+    var raw = decodeURIComponent(location.hash.slice(1));
+    if (/^only\//i.test(raw)) { renderOnly(raw.replace(/^only\//i, "")); return; }
+    if (state.only) { location.reload(); return; }
+    var hash = raw;
     var board = /^board\//i.test(hash);
     hash = hash.replace(/^board\//i, "");
     var match = state.courses.filter(function (c) { return hash.toLowerCase().indexOf(c.code.toLowerCase()) === 0; })[0];
@@ -709,6 +723,38 @@
     else if ((k === "f" || k === "F") && document.fullscreenEnabled) {
       if (document.fullscreenElement) document.exitFullscreen(); else $("board").requestFullscreen();
     }
+  });
+
+  /* ---------- single-standard view ---------- */
+  function renderOnly(code) {
+    var d = state.data.filter(function (r) { return r.code.toLowerCase() === code.toLowerCase(); })[0];
+    state.only = d ? d.code : code;
+    document.body.classList.add("only");
+    renderBrand();
+    $("tabs").innerHTML = "";
+    if (!d) {
+      document.title = "Standard not found";
+      $("main").innerHTML = '<div class="empty"><h3>Standard not found</h3><p>No standard has the code "' + esc(code) + '". Check the link and try again.</p></div>';
+      return;
+    }
+    var c = state.courses.filter(function (x) { return x.code.toLowerCase() === d.course.toLowerCase(); })[0] || { name: d.course };
+    document.title = d.code + " " + d.standard;
+    $("main").innerHTML =
+      '<p class="only-course">' + esc([c.name, c.period && c.period + " period"].filter(Boolean).join(", ")) + "</p>" +
+      '<div class="controls"><div class="focus" role="group" aria-label="Show rubric levels"><span>Show</span><div class="seg">' +
+      ["all", "4", "3", "2", "1"].map(function (f) {
+        return '<button type="button" data-focus="' + f + '" aria-pressed="' + (state.focus === f) + '">' + (f === "all" ? "All levels" : f) + "</button>";
+      }).join("") + "</div></div></div>" + standardHTML(d, "", true);
+    applyFocus();
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-copy]") : null;
+    if (!t) return;
+    var url = location.href.split("#")[0].split("?")[0] + "#only/" + t.getAttribute("data-copy");
+    var done = function () { var old = t.textContent; t.textContent = "Copied"; setTimeout(function () { t.textContent = old; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { window.prompt("Copy this link", url); });
+    else window.prompt("Copy this link", url);
   });
 
   load();
