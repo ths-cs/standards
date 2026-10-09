@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core Standards & Rubrics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+  :root {
+    --brand: #7a1f2d;
+    --brand-deep: #561521;
+    --brand-tint: #f4e8ea;
+    --gold: #9a6a12;
+    --ink: #261c1e;
+    --ink-soft: #5d5154;
+    --paper: #faf9f9;
+    --card: #ffffff;
+    --line: #ddd3d5;
+    --l4: #9a6a12;
+    --l3: var(--brand);
+    --l2: #6f6366;
+    --l1: #6f6366;
+    --font: "Google Sans Flex", "Google Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: 9rem; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--font); font-size: 1rem; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand); }
+  :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+
+  /* ---------- masthead ---------- */
+  .masthead { background: var(--card); border-top: 8px solid var(--brand); border-bottom: 1px solid var(--line); }
+  .masthead-inner { max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  .logo { width: 52px; height: 52px; flex: none; color: var(--brand); }
+  .logo svg { width: 100%; height: 100%; display: block; }
+  .masthead h1 { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; }
+  .masthead p { margin: 0.15rem 0 0; color: var(--ink-soft); font-size: 0.95rem; }
+
+  /* ---------- tabs ---------- */
+  .tabbar { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .tabs { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: flex; gap: 0.25rem; overflow-x: auto; scrollbar-width: thin; }
+  .tab {
+    appearance: none; background: none; border: 0; border-bottom: 4px solid transparent;
+    font: inherit; color: var(--ink-soft); cursor: pointer; text-align: left;
+    padding: 0.7rem 1rem 0.55rem; white-space: nowrap; min-height: 56px;
+  }
+  .tab .t-name { display: block; font-weight: 500; color: var(--ink); }
+  .tab .t-meta { display: block; font-size: 0.8rem; }
+  .tab:hover { background: var(--brand-tint); }
+  .tab[aria-selected="true"] { border-bottom-color: var(--brand); }
+  .tab[aria-selected="true"] .t-name { font-weight: 700; color: var(--brand); }
+  .tab .badge { display: inline-block; margin-left: 0.4rem; padding: 0 0.45rem; border-radius: 999px; background: var(--brand); color: #fff; font-size: 0.75rem; font-weight: 600; }
+
+  /* ---------- course heading ---------- */
+  main { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .course-head h2 { margin: 0; font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; }
+  .course-head .code { color: var(--brand); }
+  .course-sub { margin: 0.5rem 0 0; color: var(--ink-soft); font-weight: 500; }
+  .course-note { margin: 0.75rem 0 0; max-width: 72ch; color: var(--ink); }
+
+  /* ---------- controls ---------- */
+  .controls { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; margin: 1.5rem 0 1rem; }
+  .search { flex: 1 1 260px; max-width: 420px; }
+  .search input {
+    width: 100%; font: inherit; padding: 0.6rem 0.8rem; border: 1.5px solid var(--line);
+    border-radius: 8px; background: var(--card); color: var(--ink); min-height: 44px;
+  }
+  .search input:focus { border-color: var(--brand); outline: none; box-shadow: 0 0 0 3px var(--brand-tint); }
+  .focus { display: flex; align-items: center; gap: 0.5rem; }
+  .focus > span { font-size: 0.9rem; color: var(--ink-soft); font-weight: 500; }
+  .seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--card); }
+  .seg button {
+    appearance: none; border: 0; background: none; font: inherit; font-weight: 500; color: var(--ink);
+    padding: 0.5rem 0.85rem; min-height: 44px; min-width: 44px; cursor: pointer; border-left: 1px solid var(--line);
+  }
+  .seg button:first-child { border-left: 0; }
+  .seg button:hover { background: var(--brand-tint); }
+  .seg button[aria-pressed="true"] { background: var(--brand); color: #fff; }
+  .btn {
+    appearance: none; font: inherit; font-weight: 500; color: var(--brand); background: var(--card);
+    border: 1.5px solid var(--brand); border-radius: 8px; padding: 0.5rem 0.9rem; min-height: 44px; cursor: pointer;
+  }
+  .btn:hover { background: var(--brand-tint); }
+  .spacer { flex: 1; }
+
+  details.scale { border: 1.5px solid var(--line); border-radius: 8px; background: var(--card); margin-bottom: 1.5rem; }
+  details.scale summary { cursor: pointer; padding: 0.75rem 1rem; font-weight: 600; min-height: 44px; }
+  .scale-body { padding: 0 1rem 1rem; }
+  .scale-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem 1.25rem; }
+  .scale-grid div { display: grid; grid-template-columns: auto 1fr; gap: 0 0.6rem; align-items: start; }
+  .scale-grid p { margin: 0; font-size: 0.92rem; }
+  .scale-grid strong { display: block; }
+  .scale-note { margin: 1rem 0 0; color: var(--ink-soft); font-size: 0.92rem; max-width: 80ch; }
+
+  /* ---------- standards ---------- */
+  .std { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--brand); border-radius: 4px 10px 10px 4px; margin: 0 0 1.25rem; padding: 1.25rem 1.5rem 1.25rem; }
+  .std:target, .std.hit { box-shadow: 0 0 0 3px var(--gold); }
+  .std-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; }
+  .std-code { font-size: 1.1rem; font-weight: 700; color: var(--brand); text-decoration: none; }
+  .std-code:hover { text-decoration: underline; }
+  .std-head h3 { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+  .anchor { margin-left: auto; font-size: 0.85rem; font-weight: 500; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 999px; padding: 0.1rem 0.7rem; }
+  .can { margin: 0.6rem 0 1rem; max-width: 80ch; font-size: 1.05rem; }
+  .can b { font-weight: 600; }
+
+  .levels { --cols: 4; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 0.75rem; }
+  .lvl { border-top: 5px solid var(--lc); background: var(--paper); border-radius: 0 0 8px 8px; padding: 0.75rem 0.9rem 1rem; }
+  .lvl.l4 { --lc: var(--l4); } .lvl.l3 { --lc: var(--l3); background: var(--brand-tint); }
+  .lvl.l2 { --lc: var(--l2); } .lvl.l1 { --lc: var(--l1); border-top-style: dashed; }
+  .lvl-h { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; font-weight: 600; }
+  .num { display: inline-grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: var(--lc); color: #fff; font-weight: 700; font-size: 1.05rem; flex: none; }
+  .lvl.l3 .lvl-h { color: var(--brand-deep); }
+  .lvl p { margin: 0; font-size: 0.97rem; }
+  .levels[data-focus] { --cols: 1; max-width: 70ch; }
+  .levels[data-focus="4"] .lvl:not(.l4),
+  .levels[data-focus="3"] .lvl:not(.l3),
+  .levels[data-focus="2"] .lvl:not(.l2),
+  .levels[data-focus="1"] .lvl:not(.l1) { display: none; }
+  .levels[data-focus] .lvl p { font-size: 1.15rem; }
+
+  .meta-line { margin: 1rem 0 0; font-size: 0.95rem; max-width: 80ch; }
+  .meta-line b { font-weight: 600; }
+  .note { margin: 0.75rem 0 0; padding: 0.6rem 0.9rem; border-left: 4px solid var(--gold); background: #fbf4e4; font-size: 0.95rem; max-width: 80ch; }
+  mark { background: #f6e3a6; color: inherit; padding: 0 0.1em; border-radius: 2px; }
+
+  .empty, .error { padding: 2rem; border: 1.5px dashed var(--line); border-radius: 10px; background: var(--card); max-width: 60ch; }
+  .error { border-color: var(--brand); }
+  .error h3, .empty h3 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+  .error ol { padding-left: 1.2rem; margin: 0.5rem 0 1rem; }
+  footer { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 2rem; color: var(--ink-soft); font-size: 0.9rem; }
+
+  @media (max-width: 1100px) { .levels:not([data-focus]) { --cols: 2; } }
+  @media (max-width: 640px) {
+    .levels:not([data-focus]) { --cols: 1; }
+    main { padding: 1.25rem 1rem 3rem; }
+    .std { padding: 1rem; }
+    .masthead-inner, .tabs { padding-left: 1rem; padding-right: 1rem; }
+    .anchor { margin-left: 0; }
+    html { scroll-padding-top: 8rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+
+  @media print {
+    @page { margin: 0.5in; }
+    .tabbar, .controls, details.scale, footer { display: none !important; }
+    body { background: #fff; }
+    .masthead { border-top-width: 6px; }
+    main { padding: 1rem 0; }
+    .std { break-inside: avoid; box-shadow: none !important; }
+    .levels:not([data-focus]) { --cols: 4; }
+    .lvl p { font-size: 0.85rem; }
+    .std-head h3 { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="logo" id="logo" aria-hidden="true"></div>
+    <div>
+      <h1>Core standards &amp; rubrics</h1>
+      <p id="subtitle"></p>
+    </div>
+  </div>
+</header>
+
+<div class="tabbar"><div class="tabs" id="tabs" role="tablist" aria-label="Courses"></div></div>
+
+<main id="main" aria-live="polite">
+  <p>Loading standards...</p>
+</main>
+<footer id="footer"></footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- config (config.js overrides these defaults) ---------- */
+  var DEFAULTS = {
+    csvUrl: "",
+    csvFallback: "core-standards.csv",
+    schoolYear: "", school: "", instructor: "",
+    logoSvg: "",
+    brandColor: "",
+    courses: [],
+    scale: [
+      { level: 4, label: "Exceeds",     text: "Level 3 plus independent transfer to a new or more complex situation, or a professional-quality result." },
+      { level: 3, label: "Meets",       text: "The standard as written, done independently and accurately." },
+      { level: 2, label: "Approaching", text: "Partly there, with errors, gaps, or occasional help needed." },
+      { level: 1, label: "Below",       text: "Minimal evidence, or constant guidance needed." }
+    ],
+    scoringNote: ""
+  };
+  var C = Object.assign({}, DEFAULTS, window.DASHBOARD_CONFIG || {});
+
+  var DEFAULT_LOGO =
+    '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="School logo">' +
+    '<rect width="48" height="48" rx="9" fill="currentColor"/>' +
+    '<path d="M11 11h26v7h-9.5v19h-7V18H11z" fill="#fff"/></svg>';
+
+  /* ---------- state ---------- */
+  var state = { data: [], courses: [], active: null, focus: "all", query: "", targetCode: "" };
+
+  /* ---------- helpers ---------- */
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function norm(h) { return String(h || "").toLowerCase().replace(/[^a-z0-9]/g, ""); }
+
+  // Escape, then allow [label](https://url) links and highlight the search term.
+  function rich(text, query) {
+    var out = esc(text);
+    out = out.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    if (query) {
+      var q = esc(query).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      out = out.replace(new RegExp("(" + q + ")(?![^<]*>)", "ig"), "<mark>$1</mark>");
+    }
+    return out;
+  }
+
+  /* ---------- CSV ---------- */
+  function parseCSV(text) {
+    var rows = [], row = [], field = "", inQ = false, i, c;
+    text = text.replace(/^\uFEFF/, "");
+    for (i = 0; i < text.length; i++) {
+      c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
+        else field += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ",") { row.push(field); field = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && text[i + 1] === "\n") i++;
+        row.push(field); field = "";
+        if (row.some(function (v) { return v.trim() !== ""; })) rows.push(row);
+        row = [];
+      } else field += c;
+    }
+    row.push(field);
+    if (row.some(function (v) { return v.trim() !== ""; })) rows.push(row);
+    return rows;
+  }
+
+  var ALIASES = {
+    course:   ["course", "coursecode", "class"],
+    code:     ["code", "standardcode", "id"],
+    standard: ["standard", "standardname", "title", "name"],
+    anchor:   ["anchor", "alignment", "framework", "question", "module", "ncas"],
+    can:      ["studentscan", "studentcan", "ican", "can", "description"],
+    l4:       ["4exceeds", "exceeds", "level4", "4"],
+    l3:       ["3meets", "meets", "level3", "3"],
+    l2:       ["2approaching", "approaching", "level2", "2"],
+    l1:       ["1below", "below", "level1", "1"],
+    evidence: ["evidence", "evidenceofmastery", "assessedby"],
+    notes:    ["notes", "note"]
+  };
+
+  function toObjects(rows) {
+    if (!rows.length) return [];
+    var map = {}, head = rows[0].map(norm);
+    Object.keys(ALIASES).forEach(function (k) {
+      for (var a = 0; a < ALIASES[k].length; a++) {
+        var idx = head.indexOf(ALIASES[k][a]);
+        if (idx > -1) { map[k] = idx; break; }
+      }
+    });
+    if (map.code == null || map.course == null) throw new Error("The CSV needs at least Course and Code columns.");
+    return rows.slice(1).map(function (r) {
+      var o = {};
+      Object.keys(ALIASES).forEach(function (k) { o[k] = map[k] == null ? "" : (r[map[k]] || "").trim(); });
+      return o;
+    }).filter(function (o) { return o.code && o.course; });
+  }
+
+  function sheetUrl(u) {
+    if (/docs\.google\.com\/spreadsheets/.test(u) && !/output=csv/.test(u)) {
+      u += (u.indexOf("?") > -1 ? "&" : "?") + "output=csv";
+    }
+    return u;
+  }
+
+  function fetchCSV(url, tries) {
+    return fetch(url, { cache: "no-store" }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    }).then(function (t) {
+      // Google sometimes returns an HTML page right after publishing.
+      if (/^\s*<(!doctype|html)/i.test(t)) throw new Error("Received a web page instead of CSV data.");
+      return t;
+    }).catch(function (err) {
+      if (tries > 1) return new Promise(function (res) { setTimeout(res, 900); }).then(function () { return fetchCSV(url, tries - 1); });
+      throw err;
+    });
+  }
+
+  /* ---------- load ---------- */
+  function load() {
+    var url = C.csvUrl ? sheetUrl(C.csvUrl) : C.csvFallback;
+    fetchCSV(url, 3).then(ingest).catch(showError);
+  }
+
+  function ingest(text) {
+    state.data = toObjects(parseCSV(text));
+    if (!state.data.length) throw new Error("No standards were found in the CSV.");
+
+    // Course tabs: config order first, then any extra courses found in the data.
+    var seen = {}, list = [];
+    C.courses.forEach(function (c) {
+      var has = state.data.some(function (d) { return d.course.toLowerCase() === c.code.toLowerCase(); });
+      if (has) { list.push(c); seen[c.code.toLowerCase()] = 1; }
+    });
+    state.data.forEach(function (d) {
+      var k = d.course.toLowerCase();
+      if (!seen[k]) { seen[k] = 1; list.push({ code: d.course, name: d.course }); }
+    });
+    state.courses = list;
+
+    var hash = decodeURIComponent((location.hash || "").slice(1));
+    var match = list.filter(function (c) {
+      return hash && (hash.toLowerCase() === c.code.toLowerCase() || hash.toLowerCase().indexOf(c.code.toLowerCase()) === 0);
+    })[0];
+    state.active = (match || list[0]).code;
+    state.targetCode = /\d/.test(hash) ? hash : "";
+    renderAll();
+    if (state.targetCode) scrollToTarget();
+  }
+
+  function showError(err) {
+    $("tabs").innerHTML = "";
+    $("main").innerHTML =
+      '<div class="error"><h3>The standards could not be loaded</h3>' +
+      "<p>" + esc(err.message) + "</p><ol>" +
+      "<li>If you are using a Google Sheet, publish it with File &gt; Share &gt; Publish to web, choose CSV, and paste the link into <code>csvUrl</code> in config.js.</li>" +
+      "<li>If you opened this file straight from your computer, the browser may block loading the CSV. Upload both files to GitHub Pages, or choose the CSV below.</li></ol>" +
+      '<label class="btn" style="display:inline-block">Choose a CSV file<input id="file" type="file" accept=".csv,text/csv" hidden></label></div>';
+    $("file").addEventListener("change", function (e) {
+      var f = e.target.files[0]; if (!f) return;
+      f.text().then(function (t) { try { ingest(t); } catch (x) { showError(x); } });
+    });
+  }
+
+  /* ---------- render ---------- */
+  function courseMeta(code) {
+    return state.courses.filter(function (c) { return c.code === code; })[0] || { code: code, name: code };
+  }
+  function rowsFor(code) {
+    return state.data.filter(function (d) { return d.course.toLowerCase() === code.toLowerCase(); });
+  }
+  function matches(d, q) {
+    if (!q) return true;
+    q = q.toLowerCase();
+    return [d.code, d.standard, d.anchor, d.can, d.l4, d.l3, d.l2, d.l1, d.evidence, d.notes]
+      .join(" ").toLowerCase().indexOf(q) > -1;
+  }
+
+  function renderAll() { renderBrand(); renderTabs(); renderCourse(); }
+
+  function renderBrand() {
+    if (C.brandColor) {
+      document.documentElement.style.setProperty("--brand", C.brandColor);
+    }
+    $("logo").innerHTML = C.logoSvg || DEFAULT_LOGO;
+    var bits = [C.school, C.schoolYear && (C.schoolYear + " school year")].filter(Boolean);
+    $("subtitle").textContent = bits.join(", ");
+    $("footer").textContent = C.instructor ? "Instructor: " + C.instructor : "";
+  }
+
+  function renderTabs() {
+    $("tabs").innerHTML = state.courses.map(function (c) {
+      var sel = c.code === state.active;
+      var n = state.query ? rowsFor(c.code).filter(function (d) { return matches(d, state.query); }).length : null;
+      return '<button class="tab" role="tab" id="tab-' + esc(c.code) + '" aria-selected="' + sel + '" tabindex="' + (sel ? 0 : -1) +
+        '" data-code="' + esc(c.code) + '"><span class="t-name">' + esc(c.name) +
+        (n != null ? '<span class="badge" aria-label="' + n + ' matches">' + n + "</span>" : "") +
+        '</span><span class="t-meta">' + esc([c.period && c.period + " period", c.code].filter(Boolean).join(", ")) + "</span></button>";
+    }).join("");
+  }
+
+  function renderCourse() {
+    var c = courseMeta(state.active);
+    var all = rowsFor(c.code);
+    var rows = all.filter(function (d) { return matches(d, state.query); });
+    var q = state.query;
+
+    var html = '<section class="course-head" role="tabpanel" aria-labelledby="tab-' + esc(c.code) + '">' +
+      "<h2>" + esc(c.name) + ' <span class="code">' + esc(c.code) + "</span></h2>" +
+      (c.schedule || c.period ? '<p class="course-sub">' + esc([c.period && c.period + " period", c.schedule].filter(Boolean).join(", ")) + "</p>" : "") +
+      (c.note ? '<p class="course-note">' + esc(c.note) + "</p>" : "") + "</section>";
+
+    html += '<div class="controls">' +
+      '<div class="search"><input id="q" type="search" placeholder="Search standards and rubric language" aria-label="Search standards" value="' + esc(q) + '"></div>' +
+      '<div class="focus" role="group" aria-label="Show rubric levels"><span>Show</span><div class="seg">' +
+      ["all", "4", "3", "2", "1"].map(function (f) {
+        return '<button type="button" data-focus="' + f + '" aria-pressed="' + (state.focus === f) + '">' + (f === "all" ? "All levels" : f) + "</button>";
+      }).join("") + "</div></div>" +
+      '<span class="spacer"></span><button class="btn" id="print" type="button">Print this course</button></div>';
+
+    html += '<details class="scale"><summary>How scoring works</summary><div class="scale-body"><div class="scale-grid">' +
+      C.scale.map(function (s) {
+        return '<div><span class="lvl l' + s.level + '" style="border:0;background:none;padding:0"><span class="num">' + s.level + "</span></span><p><strong>" + esc(s.label) + "</strong>" + esc(s.text) + "</p></div>";
+      }).join("") + "</div>" + (C.scoringNote ? '<p class="scale-note">' + esc(C.scoringNote) + "</p>" : "") + "</div></details>";
+
+    if (!rows.length) {
+      html += '<div class="empty"><h3>No standards match "' + esc(q) + '"</h3><p>Try a shorter search, or switch courses to see matches elsewhere.</p>' +
+        '<button class="btn" id="clear" type="button">Clear search</button></div>';
+    } else {
+      html += rows.map(function (d) { return standardHTML(d, q); }).join("");
+    }
+    $("main").innerHTML = html;
+    applyFocus();
+  }
+
+  function levelHTML(n, label, text, q) {
+    return '<div class="lvl l' + n + '"><div class="lvl-h"><span class="num">' + n + "</span><span>" + label + "</span></div><p>" + rich(text, q) + "</p></div>";
+  }
+
+  function standardHTML(d, q) {
+    var labels = {}; C.scale.forEach(function (s) { labels[s.level] = s.label; });
+    return '<article class="std" id="' + esc(d.code) + '">' +
+      '<div class="std-head"><a class="std-code" href="#' + encodeURIComponent(d.code) + '">' + rich(d.code, q) + "</a>" +
+      "<h3>" + rich(d.standard, q) + "</h3>" +
+      (d.anchor ? '<span class="anchor">' + rich(d.anchor, q) + "</span>" : "") + "</div>" +
+      (d.can ? '<p class="can"><b>Students can</b> ' + lowerFirst(rich(d.can, q)) + "</p>" : "") +
+      '<div class="levels">' +
+        levelHTML(4, labels[4] || "Exceeds", d.l4, q) + levelHTML(3, labels[3] || "Meets", d.l3, q) +
+        levelHTML(2, labels[2] || "Approaching", d.l2, q) + levelHTML(1, labels[1] || "Below", d.l1, q) +
+      "</div>" +
+      (d.evidence ? '<p class="meta-line"><b>Evidence</b> ' + rich(d.evidence, q) + "</p>" : "") +
+      (d.notes ? '<p class="note">' + rich(d.notes, q) + "</p>" : "") +
+      "</article>";
+  }
+  function lowerFirst(s) { return s; } // CSV text already starts mid-sentence ("Identify...") so keep as written.
+
+  function applyFocus() {
+    var els = document.querySelectorAll(".levels");
+    for (var i = 0; i < els.length; i++) {
+      if (state.focus === "all") els[i].removeAttribute("data-focus");
+      else els[i].setAttribute("data-focus", state.focus);
+    }
+  }
+
+  function scrollToTarget() {
+    var el = state.targetCode && document.getElementById(state.targetCode);
+    if (el) { el.classList.add("hit"); el.scrollIntoView({ block: "start" }); }
+  }
+
+  /* ---------- events ---------- */
+  function activate(code, focusTab) {
+    state.active = code; state.targetCode = "";
+    history.replaceState(null, "", "#" + encodeURIComponent(code));
+    renderTabs(); renderCourse();
+    if (focusTab) { var t = $("tab-" + code); if (t) t.focus(); }
+    window.scrollTo({ top: 0 });
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-code], [data-focus], #print, #clear") : null;
+    if (!t) return;
+    if (t.classList.contains("tab")) activate(t.getAttribute("data-code"));
+    else if (t.hasAttribute("data-focus")) {
+      state.focus = t.getAttribute("data-focus");
+      var btns = document.querySelectorAll(".seg button");
+      for (var i = 0; i < btns.length; i++) btns[i].setAttribute("aria-pressed", btns[i] === t);
+      applyFocus();
+    } else if (t.id === "print") window.print();
+    else if (t.id === "clear") { state.query = ""; renderTabs(); renderCourse(); }
+  });
+
+  var typing;
+  document.addEventListener("input", function (e) {
+    if (e.target.id !== "q") return;
+    clearTimeout(typing);
+    var val = e.target.value;
+    typing = setTimeout(function () {
+      state.query = val.trim();
+      renderTabs(); renderCourse();
+      var q = $("q"); q.focus(); q.setSelectionRange(q.value.length, q.value.length);
+    }, 180);
+  });
+
+  // Arrow-key navigation between tabs.
+  $("tabs").addEventListener("keydown", function (e) {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    var codes = state.courses.map(function (c) { return c.code; });
+    var i = codes.indexOf(state.active);
+    i = (i + (e.key === "ArrowRight" ? 1 : -1) + codes.length) % codes.length;
+    activate(codes[i], true);
+    e.preventDefault();
+  });
+
+  window.addEventListener("hashchange", function () {
+    if (!state.data.length) return;
+    var hash = decodeURIComponent(location.hash.slice(1));
+    var match = state.courses.filter(function (c) { return hash.toLowerCase().indexOf(c.code.toLowerCase()) === 0; })[0];
+    if (match) {
+      state.active = match.code; state.targetCode = /\d/.test(hash) ? hash : "";
+      renderTabs(); renderCourse(); if (state.targetCode) scrollToTarget();
+    }
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
