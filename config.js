@@ -26,12 +26,26 @@ window.DASHBOARD_CONFIG = {
     { code: "GA1", name: "Graphic Art 1",       period: "2nd", schedule: "Yearlong, 44 min daily",
       note: "The five ACPro domains shared by the Photoshop and Illustrator exams." },
     { code: "HSB", name: "High School & Beyond", period: "3rd", schedule: "Advisory, 22 min daily, class of 2027",
-      note: "Built on three questions: Who am I? What can I become? How do I become that? Reporting may use a simpler scale, but the six standards stay the same." },
+      note: "Built on three questions: Who am I? What can I become? How do I become that? Reporting may use a simpler scale, but the standards stay the same." },
     { code: "FrS", name: "Freshman Success",    period: "4th", schedule: "Semester, 75 min daily",
-      note: "FrS1\u2013FrS5 follow the School-Connect modules. FrS6 covers Ed Club keyboarding." },
+      note: "FrS1\u2013FrS4 follow the School-Connect modules. FrS5 covers Ed Club keyboarding." },
     { code: "DA1", name: "Digital Art 1",       period: "5th", schedule: "Semester, 75 min daily",
-      note: "Aligned to the National Core Arts Standards for Visual Arts." }
+      note: "Aligned to the National Core Arts Standards for Visual Arts." },
+    { code: "21C", name: "CTE 21st Century Leadership Skills", short: "Leadership Skills", schedule: "All courses, gradebook slot 6",
+      note: [
+        "One standard, identical in every course, scored from six strands. Source: OSPI Washington CTE Leadership Skills.",
+        "How the single 21C score is calculated: score each strand 4-3-2-1 using the rubrics below, based on roughly the last two weeks. Average the strands that were observed, and leave out a strand that was not visible rather than entering IE. Enter the average as the 21C score. A student self-evaluation is a reflection only. The teacher score is the one entered.",
+        "Boundaries: deadlines, punctuality, rule-following, and day-to-day safety compliance are scored in 21C, not in academic standards. Skill and knowledge of safety is scored in GA2.1. Ethical use and citation of sources is a skill in GA2.2 and DA1.2, and a habit in the Information & Technology Use strand."
+      ] }
   ],
+
+  // Shown at the bottom of every course page, linking to the shared 21C tab.
+  shared: {
+    code: "21C",
+    title: "Gradebook slot 6: 21C",
+    text: "Every course also includes one 21st Century Leadership Skills standard. It uses the same six strands in all five courses.",
+    button: "See the six strands"
+  },
 
   // Scoring language, from the THS Standards-Based Grading Implementation Handbook, 2026-2027.
   // Shown in "How scoring works" and used for the level names on every rubric.
@@ -44,6 +58,8 @@ window.DASHBOARD_CONFIG = {
   ],
 
   scoringNotes: [
+    { title: "Five standards plus 21C",
+      text: "Each course has five academic standards and one 21st Century standard (21C) in gradebook slot 6. Deadlines, punctuality, and day-to-day rule-following are scored in 21C, not in the academic standards." },
     { title: "What counts",
       text: "Grades reflect learning. Attendance, behavior, participation, extra credit, compliance, and late penalties do not change an academic score. Habits of Success are reported separately." },
     { title: "How the final score is decided",
