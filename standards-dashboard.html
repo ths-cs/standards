@@ -198,6 +198,15 @@
   .chip[aria-current="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 700; }
   .b-hint { color: var(--ink-soft); font-size: 0.8rem; text-align: center; padding: 0 1rem 0.5rem; background: var(--card); margin: 0; }
   @media (max-height: 560px) { .b-hint { display: none; } }
+  @media (max-height: 900px) and (min-width: 900px) {
+    .b-title { font-size: clamp(1.8rem, 4.4vw, 4.5rem); }
+    .b-title.long { font-size: clamp(1.6rem, 3vw, 3.6rem); }
+    .b-can { font-size: clamp(1.1rem, 1.9vw, 2.2rem); }
+    .b-can.long { font-size: clamp(1rem, 1.6vw, 2rem); }
+    .b-levels .lvl p { font-size: clamp(0.95rem, 1.3vw, 1.6rem); line-height: 1.28; }
+    .b-levels[data-focus] .lvl p { font-size: clamp(1.4rem, 2.8vw, 3.2rem); }
+    .b-hint { display: none; }
+  }
   @media print { .board { display: none !important; } .shared .btn { display: none; } }
 
   @media (max-width: 1100px) { .levels:not([data-focus]) { --cols: 2; } }
@@ -692,7 +701,7 @@
     }
 
     var courseOpts = state.courses.map(function (x) {
-      return '<option value="' + esc(x.code) + '"' + (x.code === state.active ? " selected" : "") + ">" + esc(x.name) + "</option>";
+      return '<option value="' + esc(x.code) + '"' + (x.code === state.active ? " selected" : "") + ">" + esc(x.short || x.name) + "</option>";
     }).join("");
 
     el.innerHTML =
