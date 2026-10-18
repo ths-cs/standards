@@ -97,6 +97,13 @@
   .scale-grid div { display: grid; grid-template-columns: auto 1fr; gap: 0 0.6rem; align-items: start; }
   .scale-grid p { margin: 0; font-size: 0.92rem; }
   .scale-grid strong { display: block; }
+  .shared { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; padding: 1rem 1.5rem; border: 1.5px dashed var(--brand); border-radius: 10px; background: var(--brand-tint); }
+  .shared h3 { margin: 0 0 0.2rem; font-size: 1.15rem; font-weight: 600; color: var(--brand-deep); }
+  .shared p { margin: 0; max-width: 70ch; }
+  .shared .btn { margin-left: auto; background: var(--card); }
+  .b-evi { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.5rem clamp(0.75rem, 1.5vw, 1.5rem); font-size: clamp(0.85rem, 1.15vw, 1.35rem); line-height: 1.35; }
+  .b-evi p { margin: 0; }
+  .b-evi b { display: block; color: var(--brand); font-weight: 600; }
   .scale-notes { margin: 1.25rem 0 0; display: grid; gap: 0.6rem; max-width: 80ch; }
   .scale-notes p { margin: 0; font-size: 0.95rem; }
   .scale-notes b { font-weight: 600; }
@@ -130,6 +137,7 @@
   .levels[data-focus] .lvl p { font-size: 1.15rem; }
 
   .meta-line { margin: 1rem 0 0; font-size: 0.95rem; max-width: 80ch; }
+  .meta-line + .meta-line { margin-top: 0.3rem; }
   .meta-line b { font-weight: 600; }
   .note { margin: 0.75rem 0 0; padding: 0.6rem 0.9rem; border-left: 4px solid var(--gold); background: #fbf4e4; font-size: 0.95rem; max-width: 80ch; }
   mark { background: #f6e3a6; color: inherit; padding: 0 0.1em; border-radius: 2px; }
@@ -159,14 +167,19 @@
   .b-course span { color: var(--brand); }
   .b-count { color: var(--ink-soft); font-size: clamp(0.9rem, 1.2vw, 1.3rem); font-weight: 500; }
   .b-tools { margin-left: auto; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: center; justify-content: flex-end; }
+  .b-tools label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .b-tools .btn { padding: 0.45rem 0.8rem; }
   .b-tools select { font: inherit; min-height: 44px; padding: 0.4rem 0.6rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); }
-  .b-stage { flex: 1; min-height: 0; overflow: auto; padding: clamp(0.75rem, 2.5vh, 2rem) clamp(1rem, 2.5vw, 2.5rem); display: flex; flex-direction: column; gap: clamp(0.6rem, 2vh, 1.75rem); }
+  .b-stage { flex: 1; min-height: 0; overflow: auto; padding: clamp(0.5rem, 1.8vh, 2rem) clamp(1rem, 2.5vw, 2.5rem); display: flex; flex-direction: column; gap: clamp(0.4rem, 1.5vh, 1.75rem); }
   .b-id { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
   .b-code { font-size: clamp(1.25rem, 2.4vw, 2.6rem); font-weight: 700; color: var(--brand); }
   .b-id .anchor { margin: 0; font-size: clamp(0.85rem, 1.2vw, 1.3rem); }
   .b-title { margin: 0; font-size: clamp(2.1rem, 5.4vw, 6rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.04; }
   .b-can { margin: 0; max-width: 34em; font-size: clamp(1.2rem, 2.3vw, 2.7rem); line-height: 1.3; }
   .b-can b { font-weight: 600; color: var(--brand); }
+  .b-title.long { font-size: clamp(1.8rem, 3.5vw, 4.2rem); }
+  .b-can.long { font-size: clamp(1.05rem, 1.8vw, 2.2rem); }
+  .btn[aria-pressed="true"] { background: var(--brand); color: #fff; }
   .b-levels { margin-top: auto; gap: clamp(0.5rem, 1.2vw, 1.25rem); }
   .b-levels .lvl { padding: clamp(0.6rem, 1.2vw, 1.25rem); }
   .b-levels .lvl-h { font-size: clamp(1rem, 1.5vw, 1.8rem); }
@@ -175,7 +188,7 @@
   .b-levels[data-focus] { max-width: none; margin-top: clamp(0.5rem, 3vh, 2rem); }
   .b-levels[data-focus] .lvl p { font-size: clamp(1.5rem, 3.2vw, 3.8rem); line-height: 1.25; }
   .b-extra { margin: 0; max-width: 60em; font-size: clamp(0.95rem, 1.3vw, 1.5rem); }
-  .b-extra.note { padding: 0.6rem 0.9rem; border-left: 4px solid var(--gold); background: #fbf4e4; }
+  .b-extra.note { font-size: clamp(0.85rem, 1.1vw, 1.3rem); padding: 0.45rem 0.8rem; border-left: 4px solid var(--gold); background: #fbf4e4; }
   .b-nav { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem clamp(1rem, 2.5vw, 2.5rem) 0.8rem; border-top: 1px solid var(--line); background: var(--card); }
   .b-nav .btn { min-width: 48px; min-height: 48px; font-size: 1.1rem; }
   .btn:disabled { opacity: 0.35; cursor: default; background: var(--card); }
@@ -185,7 +198,7 @@
   .chip[aria-current="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 700; }
   .b-hint { color: var(--ink-soft); font-size: 0.8rem; text-align: center; padding: 0 1rem 0.5rem; background: var(--card); margin: 0; }
   @media (max-height: 560px) { .b-hint { display: none; } }
-  @media print { .board { display: none !important; } }
+  @media print { .board { display: none !important; } .shared .btn { display: none; } }
 
   @media (max-width: 1100px) { .levels:not([data-focus]) { --cols: 2; } }
   @media (max-width: 640px) {
@@ -251,7 +264,8 @@
       { level: "IE", label: "Insufficient Evidence", text: "Insufficient evidence exists to determine a proficiency score." }
     ],
     scoringNotes: [],
-    scoringSource: ""
+    scoringSource: "",
+    shared: null
   };
   var C = Object.assign({}, DEFAULTS, window.DASHBOARD_CONFIG || {});
 
@@ -261,7 +275,7 @@
     '<path d="M11 11h26v7h-9.5v19h-7V18H11z" fill="#fff"/></svg>';
 
   /* ---------- state ---------- */
-  var state = { data: [], courses: [], active: null, focus: "all", query: "", targetCode: "", only: "" };
+  var state = { data: [], courses: [], active: null, focus: "all", query: "", targetCode: "", only: "", boardEvi: false };
 
   /* ---------- helpers ---------- */
   function $(id) { return document.getElementById(id); }
@@ -317,7 +331,9 @@
     l3:       ["3meets", "meets", "level3", "3"],
     l2:       ["2approaching", "approaching", "level2", "2"],
     l1:       ["1below", "below", "level1", "1"],
-    evidence: ["evidence", "evidenceofmastery", "assessedby"],
+    evidence: ["evidence", "summativeevidence", "primaryevidence", "evidenceofmastery", "assessedby"],
+    formative: ["formative", "formativechecks"],
+    reassess: ["reassess", "reassessby"],
     notes:    ["notes", "note"]
   };
 
@@ -420,7 +436,7 @@
   function matches(d, q) {
     if (!q) return true;
     q = q.toLowerCase();
-    return [d.code, d.standard, d.anchor, d.can, d.l4, d.l3, d.l2, d.l1, d.evidence, d.notes]
+    return [d.code, d.standard, d.anchor, d.can, d.l4, d.l3, d.l2, d.l1, d.evidence, d.formative, d.reassess, d.notes]
       .join(" ").toLowerCase().indexOf(q) > -1;
   }
 
@@ -443,7 +459,7 @@
       var sel = c.code === state.active;
       var n = state.query ? rowsFor(c.code).filter(function (d) { return matches(d, state.query); }).length : null;
       return '<button class="tab" role="tab" id="tab-' + esc(c.code) + '" aria-selected="' + sel + '" tabindex="' + (sel ? 0 : -1) +
-        '" data-code="' + esc(c.code) + '"><span class="t-name">' + esc(c.name) +
+        '" data-code="' + esc(c.code) + '"><span class="t-name">' + esc(c.short || c.name) +
         (n != null ? '<span class="badge" aria-label="' + n + ' matches">' + n + "</span>" : "") +
         '</span><span class="t-meta">' + esc([c.period && c.period + " period", c.code].filter(Boolean).join(", ")) + "</span></button>";
     }).join("");
@@ -458,7 +474,7 @@
     var html = '<section class="course-head" role="tabpanel" aria-labelledby="tab-' + esc(c.code) + '">' +
       "<h2>" + esc(c.name) + ' <span class="code">' + esc(c.code) + "</span></h2>" +
       (c.schedule || c.period ? '<p class="course-sub">' + esc([c.period && c.period + " period", c.schedule].filter(Boolean).join(", ")) + "</p>" : "") +
-      (c.note ? '<p class="course-note">' + esc(c.note) + "</p>" : "") + "</section>";
+      noteHTML(c.note) + "</section>";
 
     html += '<div class="controls">' +
       '<div class="search"><input id="q" type="search" placeholder="Search standards and rubric language" aria-label="Search standards" value="' + esc(q) + '"></div>' +
@@ -479,8 +495,27 @@
     } else {
       html += rows.map(function (d) { return standardHTML(d, q); }).join("");
     }
+    if (C.shared && C.shared.code && c.code !== C.shared.code && !q && rowsFor(C.shared.code).length) html += sharedCardHTML();
     $("main").innerHTML = html;
     applyFocus();
+  }
+
+  function noteHTML(n) {
+    if (!n) return "";
+    var parts = Array.isArray(n) ? n : String(n).split(/\n+/);
+    return parts.filter(Boolean).map(function (t) { return '<p class="course-note">' + esc(t) + "</p>"; }).join("");
+  }
+
+  function sharedCardHTML() {
+    var sh = C.shared;
+    return '<aside class="shared"><div><h3>' + esc(sh.title || sh.code) + "</h3><p>" + esc(sh.text || "") + "</p></div>" +
+      '<button class="btn go-course" type="button" data-code="' + esc(sh.code) + '">' + esc(sh.button || "View") + "</button></aside>";
+  }
+
+  function evidenceHTML(d, q) {
+    return [["Summative evidence", d.evidence], ["Formative checks", d.formative], ["Reassess by", d.reassess]]
+      .filter(function (x) { return x[1]; })
+      .map(function (x) { return '<p class="meta-line"><b>' + x[0] + "</b> " + rich(x[1], q) + "</p>"; }).join("");
   }
 
   function scoringNotesHTML() {
@@ -509,7 +544,7 @@
         levelHTML(4, labels[4] || "Exceeds", d.l4, q) + levelHTML(3, labels[3] || "Meets", d.l3, q) +
         levelHTML(2, labels[2] || "Approaching", d.l2, q) + levelHTML(1, labels[1] || "Below", d.l1, q) +
       "</div>" +
-      (d.evidence ? '<p class="meta-line"><b>Evidence</b> ' + rich(d.evidence, q) + "</p>" : "") +
+      evidenceHTML(d, q) +
       (d.notes ? '<p class="note">' + rich(d.notes, q) + "</p>" : "") +
       "</article>";
   }
@@ -540,7 +575,7 @@
   document.addEventListener("click", function (e) {
     var t = e.target.closest ? e.target.closest("[data-code], [data-focus], #print, #clear") : null;
     if (!t) return;
-    if (t.classList.contains("tab")) activate(t.getAttribute("data-code"));
+    if (t.classList.contains("tab") || t.classList.contains("go-course")) activate(t.getAttribute("data-code"));
     else if (t.hasAttribute("data-focus")) setFocus(t.getAttribute("data-focus"));
     else if (t.id === "print") window.print();
     else if (t.id === "clear") { state.query = ""; renderTabs(); renderCourse(); }
@@ -634,6 +669,12 @@
     renderBoard(); syncBoardHash();
   }
 
+  function boardEvidence(d) {
+    var items = [["Summative evidence", d.evidence], ["Formative checks", d.formative], ["Reassess by", d.reassess]].filter(function (x) { return x[1]; });
+    if (!items.length) return "";
+    return '<div class="b-evi">' + items.map(function (x) { return "<p><b>" + x[0] + "</b>" + rich(x[1]) + "</p>"; }).join("") + "</div>";
+  }
+
   function renderBoard() {
     var rows = rowsFor(state.active), n = rows.length, d = rows[state.board.idx], c = courseMeta(state.active);
     var labels = {}; C.scale.forEach(function (s) { labels[s.level] = s.label; });
@@ -662,17 +703,18 @@
       ["all", "4", "3", "2", "1"].map(function (f) {
         return '<button type="button" data-bfocus="' + f + '" aria-pressed="' + (state.focus === f) + '">' + (f === "all" ? "All levels" : f) + "</button>";
       }).join("") + "</div>" +
+      ((d.evidence || d.formative || d.reassess) ? '<button class="btn" type="button" data-b="evi" aria-pressed="' + !!state.boardEvi + '">Evidence</button>' : "") +
       (document.fullscreenEnabled ? '<button class="btn" type="button" data-b="full">Full screen</button>' : "") +
       '<button class="btn" type="button" data-b="close">Close</button></div></div>' +
 
       '<div class="b-stage"><div class="b-id"><span class="b-code">' + esc(d.code) + "</span>" +
       (d.anchor ? '<span class="anchor">' + esc(d.anchor) + "</span>" : "") + "</div>" +
-      '<h2 class="b-title">' + esc(d.standard) + "</h2>" +
-      (d.can ? '<p class="b-can"><b>Students can</b> ' + rich(d.can) + "</p>" : "") +
+      '<h2 class="b-title' + (d.standard.length > 32 ? " long" : "") + '">' + esc(d.standard) + "</h2>" +
+      (d.can ? '<p class="b-can' + (d.can.length > 110 ? " long" : "") + '"><b>Students can</b> ' + rich(d.can) + "</p>" : "") +
       '<div class="levels b-levels"' + (state.focus !== "all" ? ' data-focus="' + state.focus + '"' : "") + ">" +
         levelHTML(4, labels[4] || "Exceeds", d.l4, "") + levelHTML(3, labels[3] || "Meets", d.l3, "") +
         levelHTML(2, labels[2] || "Approaching", d.l2, "") + levelHTML(1, labels[1] || "Below", d.l1, "") + "</div>" +
-      (d.evidence ? '<p class="b-extra"><b>Evidence</b> ' + rich(d.evidence) + "</p>" : "") +
+      (state.boardEvi ? boardEvidence(d) : "") +
       (d.notes ? '<p class="b-extra note">' + rich(d.notes) + "</p>" : "") + "</div>" +
 
       '<div class="b-nav"><button class="btn" type="button" data-b="prev" aria-label="Previous standard"' + (state.board.idx === 0 ? " disabled" : "") + '>&larr; Prev</button>' +
@@ -680,7 +722,7 @@
         return '<button class="chip" type="button" data-bi="' + i + '" aria-current="' + (i === state.board.idx) + '">' + esc(r.code) + "</button>";
       }).join("") + "</div>" +
       '<button class="btn" type="button" data-b="next" aria-label="Next standard"' + (state.board.idx === n - 1 ? " disabled" : "") + ">Next &rarr;</button></div>" +
-      '<p class="b-hint">Left and right arrows change standards. Up and down arrows change courses. Keys 1 to 4 show one level, A shows all. F toggles full screen. Esc closes.</p>';
+      '<p class="b-hint">Left and right arrows change standards. Up and down arrows change courses. Keys 1 to 4 show one level, A shows all. E shows the evidence plan. F toggles full screen. Esc closes.</p>';
 
     if (key) { var again = el.querySelector(key); if (again && !again.disabled) again.focus(); }
   }
@@ -693,6 +735,7 @@
     var act = t.getAttribute("data-b");
     if (act === "open") openBoard(t.getAttribute("data-bcode") || "");
     else if (act === "close") closeBoard();
+    else if (act === "evi") { state.boardEvi = !state.boardEvi; renderBoard(); }
     else if (act === "prev") goBoard(state.board.idx - 1);
     else if (act === "next") goBoard(state.board.idx + 1);
     else if (act === "full") {
@@ -738,6 +781,7 @@
     else if (k === "ArrowUp") { stepCourse(-1); e.preventDefault(); }
     else if (k === "1" || k === "2" || k === "3" || k === "4") setFocus(k);
     else if (k === "a" || k === "A" || k === "0") setFocus("all");
+    else if (k === "e" || k === "E") { state.boardEvi = !state.boardEvi; renderBoard(); }
     else if ((k === "f" || k === "F") && document.fullscreenEnabled) {
       if (document.fullscreenElement) document.exitFullscreen(); else $("board").requestFullscreen();
     }
