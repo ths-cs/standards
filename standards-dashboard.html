@@ -138,6 +138,13 @@
 
   .meta-line { margin: 1rem 0 0; font-size: 0.95rem; max-width: 80ch; }
   .meta-line + .meta-line { margin-top: 0.3rem; }
+  details.align { margin: 1rem 0 0; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); max-width: 90ch; }
+  details.align summary { cursor: pointer; padding: 0.55rem 0.9rem; font-weight: 600; font-size: 0.95rem; min-height: 40px; display: flex; align-items: center; gap: 0.5rem; }
+  .acount { display: inline-block; padding: 0 0.5rem; border-radius: 999px; background: var(--brand); color: #fff; font-size: 0.75rem; font-weight: 600; }
+  details.align h4 { margin: 0.5rem 0.9rem 0.25rem; font-size: 0.85rem; font-weight: 600; color: var(--brand-deep); text-transform: none; }
+  details.align ul { margin: 0 0 0.6rem; padding: 0 0.9rem 0 2.1rem; font-size: 0.92rem; }
+  details.align li { margin: 0.25rem 0; }
+  .acode { font-weight: 700; color: var(--brand); white-space: nowrap; }
   .meta-line b { font-weight: 600; }
   .note { margin: 0.75rem 0 0; padding: 0.6rem 0.9rem; border-left: 4px solid var(--gold); background: #fbf4e4; font-size: 0.95rem; max-width: 80ch; }
   mark { background: #f6e3a6; color: inherit; padding: 0 0.1em; border-radius: 2px; }
@@ -207,7 +214,7 @@
     .b-levels[data-focus] .lvl p { font-size: clamp(1.4rem, 2.8vw, 3.2rem); }
     .b-hint { display: none; }
   }
-  @media print { .board { display: none !important; } .shared .btn { display: none; } }
+  @media print { .board { display: none !important; } .shared .btn { display: none; } details.align { display: none; } }
 
   @media (max-width: 1100px) { .levels:not([data-focus]) { --cols: 2; } }
   @media (max-width: 640px) {
@@ -334,7 +341,7 @@
     course:   ["course", "coursecode", "class"],
     code:     ["code", "standardcode", "id"],
     standard: ["standard", "standardname", "title", "name"],
-    anchor:   ["anchor", "alignment", "framework", "question", "module", "ncas"],
+    anchor:   ["anchor", "framework", "question", "module", "ncas"],
     can:      ["studentscan", "studentcan", "ican", "can", "description"],
     l4:       ["4exceeds", "exceeds", "level4", "4"],
     l3:       ["3meets", "meets", "level3", "3"],
@@ -343,6 +350,8 @@
     evidence: ["evidence", "summativeevidence", "primaryevidence", "evidenceofmastery", "assessedby"],
     formative: ["formative", "formativechecks"],
     reassess: ["reassess", "reassessby"],
+    align3:   ["alignment", "alignedto", "standardsalignment"],
+    align4:   ["alignment4", "alignmentlevel4", "alignedatlevel4"],
     notes:    ["notes", "note"]
   };
 
@@ -445,7 +454,7 @@
   function matches(d, q) {
     if (!q) return true;
     q = q.toLowerCase();
-    return [d.code, d.standard, d.anchor, d.can, d.l4, d.l3, d.l2, d.l1, d.evidence, d.formative, d.reassess, d.notes]
+    return [d.code, d.standard, d.anchor, d.can, d.l4, d.l3, d.l2, d.l1, d.evidence, d.formative, d.reassess, d.align3, d.align4, d.notes]
       .join(" ").toLowerCase().indexOf(q) > -1;
   }
 
@@ -521,6 +530,26 @@
       '<button class="btn go-course" type="button" data-code="' + esc(sh.code) + '">' + esc(sh.button || "View") + "</button></aside>";
   }
 
+  function alignItems(txt) {
+    return (txt || "").split(" | ").map(function (x) { return x.trim(); }).filter(Boolean);
+  }
+
+  function alignList(items, q) {
+    return "<ul>" + items.map(function (it) {
+      var sp = it.indexOf(" ");
+      return '<li><b class="acode">' + rich(sp > -1 ? it.slice(0, sp) : it, q) + "</b> " + rich(sp > -1 ? it.slice(sp + 1) : "", q) + "</li>";
+    }).join("") + "</ul>";
+  }
+
+  function alignmentHTML(d, q) {
+    var a3 = alignItems(d.align3), a4 = alignItems(d.align4);
+    if (!a3.length && !a4.length) return "";
+    var open = q && (d.align3 + " " + d.align4).toLowerCase().indexOf(q.toLowerCase()) > -1;
+    return '<details class="align"' + (open ? " open" : "") + "><summary>Standards alignment <span class=\"acount\">" + (a3.length + a4.length) + "</span></summary>" +
+      (a3.length ? '<h4>Scored at 3 Meets</h4>' + alignList(a3, q) : "") +
+      (a4.length ? '<h4>Added at 4 Exceeds</h4>' + alignList(a4, q) : "") + "</details>";
+  }
+
   function evidenceHTML(d, q) {
     return [["Summative evidence", d.evidence], ["Formative checks", d.formative], ["Reassess by", d.reassess]]
       .filter(function (x) { return x[1]; })
@@ -553,6 +582,7 @@
         levelHTML(4, labels[4] || "Exceeds", d.l4, q) + levelHTML(3, labels[3] || "Meets", d.l3, q) +
         levelHTML(2, labels[2] || "Approaching", d.l2, q) + levelHTML(1, labels[1] || "Below", d.l1, q) +
       "</div>" +
+      alignmentHTML(d, q) +
       evidenceHTML(d, q) +
       (d.notes ? '<p class="note">' + rich(d.notes, q) + "</p>" : "") +
       "</article>";
